@@ -41,11 +41,13 @@ class Image extends JFrame {
             
         } catch (Exception ex) {
             // file read error
+        	System.out.println("file error");
             
         }
 
         if (bi == null) {
             /* null file */
+        	System.out.println("null error");
             return;
         }
 
@@ -68,7 +70,7 @@ class Image extends JFrame {
         Graphics2D g2 = (Graphics2D) g;
         
         //displays 000.jpg at C:\ in the window
-        showJPEG(1,50,g2,"C:\\", "0000.jpg");
+        showJPEG(1,50,g2,"images/", "0.jpg");
         
 
     }
@@ -93,14 +95,20 @@ class Image extends JFrame {
             
         } catch (Exception ex) {
             /*file arror*/
+        	System.out.println("file error");
         }
 
         if (bi1 == null) {
             /*null file*/
+        	System.out.println("null");
             return;
         }
 
         totalPixels = bi1.getHeight() * bi1.getWidth();
+        
+        System.out.println("height is : " + bi1.getHeight());
+        System.out.println("width is : " + bi1.getWidth());
+        
 
         ColorModel CM;
         CM = bi1.getColorModel();
@@ -158,7 +166,7 @@ class Image extends JFrame {
 		mainFrame.setVisible(true);
 
                 
-        mainFrame.getRGB(1,20,"C:\\","0000.jpg");		
+        mainFrame.getRGB(1,20,"images/", "0.jpg");		
 		
 		mainFrame.init();
 		
