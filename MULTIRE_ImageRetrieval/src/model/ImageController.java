@@ -16,7 +16,7 @@ import java.awt.image.ColorModel;
 
 public class ImageController {
 	
-	public static int[] convertImage(String Path, String Filename){
+	public static ImageObject convertImage(String Path, String Filename){
 		//loops through every pixel instead of getRGB() being a single pixel
 		
 		BufferedImage bi1 = null;
@@ -72,25 +72,21 @@ public class ImageController {
 	    		    ColorCIE.setValues(R/255.0, G/255.0, B/255.0);
 	    		    
 	    		   // System.out.println(Integer.toString());
-	    		    
 	    		    tempArray[ColorCIE.IndexOf()]++;
 	        	}
 	        }
 	        
-	        System.out.println(tempArray[0]);
+	        ImageObject tempImg = new ImageObject(tempArray,totalPixels);
 
-	        return tempArray;
+	        return tempImg;
 	}
 	
 	public static void main(String Args[]){
-//		getRGB(85,84,"images/", "0.jpg");
+
+		ImageObject img1 = convertImage("images/", "0.jpg");
+		ImageObject img2 = convertImage("images/", "2.jpg");
 		
-		int[] histogramOfImage = new int[159];
+		System.out.println(img1.getSimilarity(img2));
 		
-		histogramOfImage = convertImage("images/", "0.jpg");
-		
-		for(int x = 0; x< histogramOfImage.length; x++){
-			System.out.println(histogramOfImage[x]);
-		}
 	}
 }
