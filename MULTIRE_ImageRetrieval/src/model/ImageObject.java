@@ -33,6 +33,8 @@ public class ImageObject {
 	}
 	
 	public void getAcceptedColors(){
+		// Gets the colors of Image Q (chosen image) that's not 0.0
+		
 		ArrayList<Integer> temp = new ArrayList<Integer>();
 		
 		//159 is the total number of LUV colors we have
@@ -40,38 +42,47 @@ public class ImageObject {
 			if(histogramOfImage[x] != 0){
 				float ans = (float)histogramOfImage[x] / (float)totalPixels;
 				percentageOfColors.add(ans);
+				
 				if( ans >= 0.005){
 					numAcceptedColors++;
 				}
 			}else{
 				percentageOfColors.add((float)0.0);
 			}
+			
+			System.out.println("percentageOfColor(" + x + ") = " + percentageOfColors.get(x));
 		}
 		
 	}
 	
-	public float getSimilarity(ImageObject img1){
+	public float getSimilarity(ImageObject img2){
+		// Gets similarity of Image Q (chosen image) to another image; SIMexact part
 		
+		float checkerHistogram = 0; // the sum of all histogram must be 1.00
 		float ans= (float)0.0;
-		for(int x =0; x<percentageOfColors.size();x++ ){
-			if(percentageOfColors.get(x)!= 0.0 && img1.percentageOfColors.get(x)!=0.0){
-				float numerator = Math.abs(percentageOfColors.get(x)-img1.percentageOfColors.get(x));
-				float denominator =  Math.max(percentageOfColors.get(x), img1.percentageOfColors.get(x));
-				float temp;
-				if(denominator == 0.0){
-					temp = (float)1.0;
-				}else{
-					temp = (float)1-(numerator/denominator);
-				}
+		
+		System.out.println("\ngetSimilarity()");
+		for(int x = 0; x < percentageOfColors.size(); x++ ){
+			checkerHistogram += percentageOfColors.get(x);
+			
+			if(percentageOfColors.get(x) > 0.005){
 				
+				float numerator = Math.abs(percentageOfColors.get(x)-img2.percentageOfColors.get(x));
+				float denominator =  Math.max(percentageOfColors.get(x), img2.percentageOfColors.get(x));
 				
+				System.out.println("percentageOfColor(" + x + ") = " + percentageOfColors.get(x));
+				
+				float temp = (float)1-(numerator/denominator);		
 				ans+= temp;
 			}
 		}
 		
 		float temp1 = (float)1/numAcceptedColors;
+		float finalAns = ans * temp1;
 		
-		ans*=temp1;
-		return ans;
+		System.out.println("numAcceptedColors = " + numAcceptedColors);
+		System.out.println("checkerHistogram = " + checkerHistogram);
+		
+		return finalAns;
 	}
 }
