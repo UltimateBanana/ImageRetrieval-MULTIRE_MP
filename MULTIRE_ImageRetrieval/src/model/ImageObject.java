@@ -50,7 +50,7 @@ public class ImageObject {
 				percentageOfColors.add((float)0.0);
 			}
 			
-			System.out.println("percentageOfColor(" + x + ") = " + percentageOfColors.get(x));
+//			System.out.println("percentageOfColor(" + x + ") = " + percentageOfColors.get(x));
 		}
 		
 	}
