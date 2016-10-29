@@ -194,7 +194,7 @@ public class CenteringRefinement {
 		}
 		
 		float temp2 = (float)1/numAcceptedColorsNonCenter;
-		float finalSimNonCenter = simCenter * temp2;
+		float finalSimNonCenter = simNonCenter * temp2;
 		System.out.println("numAcceptedColorsNonCenter = " + numAcceptedColorsNonCenter);
 		
 		System.out.println("\nCR SIM in Center = " + finalSimCenter);
