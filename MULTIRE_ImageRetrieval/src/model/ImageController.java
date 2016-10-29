@@ -150,6 +150,77 @@ public class ImageController {
 			return CRImage;
 	}
 	
+	public static PerceptualSimilarity convertImagePS(String Path, String Filename){
+		BufferedImage bi1 = null;
+       int RGB1;
+       int i,j;
+       int totalPixels;
+       
+       try {
+
+            File file = new File(Path, Filename);
+            FileInputStream in = new FileInputStream(file);
+
+            // decodes the JPEG data stream into a BufferedImage
+
+            JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(in);
+            bi1 = decoder.decodeAsBufferedImage();
+            
+        } catch (Exception ex) {
+            /*file error*/
+        	System.out.println("file error");
+        }
+
+        if (bi1 == null) {
+            /*null file*/
+        	System.out.println("null");
+            return null;
+        }
+
+        totalPixels = bi1.getHeight() * bi1.getWidth();
+        
+        System.out.println("height is : " + bi1.getHeight());
+        System.out.println("width is : " + bi1.getWidth());
+	        
+     	int[] tempArray = new int[159]; // LUV values in integer
+//     	LuvValues[] LUVRawColorValues = new LuvValues[159]; // Raw LUV values
+     	
+     	// Converts each RGB color into LUV color; for the WHOLE image into a SINGLE ARRAY of colors
+     	for(int y = 0; y<bi1.getHeight();y++){
+        	//System.out.println("~~~~~"+y);
+        	for(int x = 0; x < bi1.getWidth(); x++){
+        		//System.out.println("-----"+x);
+        		ColorModel CM;
+    	        CM = bi1.getColorModel();
+    	        //change this for the loop
+    	        RGB1 = bi1.getRGB(x,y); //get the RGB value at x,y of the image
+    	        
+    	        double R, G, B;
+
+    	        R = CM.getRed(RGB1);   //get the 8-bit values of RGB (0-255)
+    	        G = CM.getGreen(RGB1);
+    	        B = CM.getBlue(RGB1);	
+    		    cieConvert ColorCIE = new cieConvert();
+    		    ColorCIE.setValues(R/255.0, G/255.0, B/255.0);
+    		    
+    		   // System.out.println(Integer.toString());
+    		    tempArray[ColorCIE.IndexOf()]++;
+    		    
+//    		    LUVRawColorValues[ColorCIE.IndexOf()] = new LuvValues(ColorCIE.L, ColorCIE.u, ColorCIE.v);
+    		    // Problem: the LUV values of the last ColorCIE.IndexOf() is the one that will stored
+    		    
+//    		    System.out.println("(" + ColorCIE.IndexOf()+") L: " + ColorCIE.L + "  U: " + ColorCIE.u + "  V: " + ColorCIE.v);
+        	}
+        }
+     	
+     	PerceptualSimilarity PSImage = new PerceptualSimilarity(tempArray, totalPixels);
+ 		return PSImage;
+     	
+//	        ImageObject tempImg = new ImageObject(tempArray,totalPixels);
+//	        return tempImg;
+		
+	}
+	
 	public static void main(String Args[]){
 
 		// COLOR HISTOGRAM
@@ -170,5 +241,15 @@ public class ImageController {
 		CenteringRefinement CRimg2 = convertImageCR("images/", "218.jpg");
 		
 		CRimg1.getSimilarity(CRimg2);
+		
+		
+		// PERCEPTUAL SIMILARITY
+		System.out.println("--- PERCEPTUAL SIMILARITY ---");
+		System.out.println("Image 1:");
+		PerceptualSimilarity PSimg1 = convertImagePS("images/", "206.jpg");
+		System.out.println("\nImage 2:");
+		PerceptualSimilarity PSimg2 = convertImagePS("images/", "218.jpg");
+		
+		PSimg1.getSimilarity(PSimg2);
 	}
 }
