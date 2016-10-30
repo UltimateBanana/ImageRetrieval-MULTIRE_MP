@@ -17,23 +17,26 @@ public class PerceptualSimilarity {
 	
 	float[][] similarityMatrix;
 	int[] LUVColorCountOfImage;
-//	LuvValues[] LUVRawColorValues;
+	LuvValues[] LUVRawColorValues;
 	ArrayList<Float> percentageOfColors; // contains Histogram of each color in whole image
 	int totalPixels; // as a whole image
 	int numAcceptedColors; // as a whole image
 	
 	public PerceptualSimilarity(int[] LUVColorCountOfImage, int totalPixels){
 		similarityMatrix = new float[159][159];
+		LUVRawColorValues = new LuvValues[159];
 		percentageOfColors = new ArrayList<Float>(0);
 		numAcceptedColors = 0;
 		
 		this.LUVColorCountOfImage = LUVColorCountOfImage;
-//		this.LUVRawColorValues = LUVRawColorValues;
 		this.totalPixels = totalPixels;
 		
 //		printLUVRaw();
-		getAcceptedColors();
+//		removeNullLuvValues();
+		getLuvValues();
 		getSimilarityMatrix();
+//		printSimMatrix();
+		getAcceptedColors();
 	}
 	
 	public void printSimMatrix(){
@@ -42,6 +45,14 @@ public class PerceptualSimilarity {
 				System.out.print(similarityMatrix[i][j]  + "  ");
 			}
 			System.out.println();
+		}
+	}
+	
+	public void removeNullLuvValues(){
+		for(int i = 0; i < LUVRawColorValues.length; i++){
+			if(LUVRawColorValues[i] == null){
+				LUVRawColorValues[i] = new LuvValues(0, 0, 0);
+			}
 		}
 	}
 	
@@ -61,7 +72,7 @@ public class PerceptualSimilarity {
 				
 				if( ans > 0.005){
 					numAcceptedColors++;
-					System.out.println("(Accepted) HISTOGRAM Of Color(" + x + ") = " + percentageOfColors.get(x));
+//					System.out.println("(Accepted) HISTOGRAM Of Color(" + x + ") = " + percentageOfColors.get(x));
 				}
 				
 			}else{ // if null
@@ -72,13 +83,25 @@ public class PerceptualSimilarity {
 		System.out.println("checkerHistogram = " + checkerHistogram);
 	}
 	
+	public void getLuvValues(){
+		cieConvert ColorCIE = new cieConvert();
+		ColorCIE.initLuvIndex();
+		
+		for(int i = 0; i < 159; i++){
+			LUVRawColorValues[i] = new LuvValues(ColorCIE.LuvIndex[i].L, 
+		    		ColorCIE.LuvIndex[i].u, ColorCIE.LuvIndex[i].v);
+			
+//			System.out.println("("+i+") L="+LUVRawColorValues[i].getValueL()+"  U="
+//			+LUVRawColorValues[i].getValueU()+"  V="+LUVRawColorValues[i].getValueV());
+		}
+	}
+	
 	public void getSimilarityMatrix(){
 		// Gets the similarity matrix by computing for max of D(i,j), Tcolor, and the similarity between two colors
 		// See Lesson 5, slides 24-26
 		
 		// Get the Dmax
-		// HOW DOES THIS EVEN WWORK
-		int Dmax = 0;
+		double Dmax = 0;
 		for(int i = 0; i < 159; i++){
 			for(int j = 0; j < 159; j++){
 				/*
@@ -86,7 +109,11 @@ public class PerceptualSimilarity {
 						Math.max(LUVRawColorValues[i].getValueU()-LUVRawColorValues[j].getValueU(), 
 								LUVRawColorValues[i].getValueV()-LUVRawColorValues[j].getValueV()));
 				*/
-				Dmax = Math.max( i-j, Dmax );
+				double Dij = Math.sqrt( Math.pow( (LUVRawColorValues[i].getValueL()-LUVRawColorValues[j].getValueL()), 2)
+						+ Math.pow( (LUVRawColorValues[i].getValueU()-LUVRawColorValues[j].getValueU()), 2)
+						+ Math.pow( (LUVRawColorValues[i].getValueV()-LUVRawColorValues[j].getValueV()), 2));
+				
+				Dmax = Math.max( Dij, Dmax );
 //				System.out.println(Dmax);
 			}
 		}
@@ -98,10 +125,14 @@ public class PerceptualSimilarity {
 		// Compute for Color Similarity Matrix
 		for(int i = 0; i < 159; i++){
 			for(int j = 0; j < 159; j++){
-				if( (i-j) > Tcolor ){
+				double Dij = Math.sqrt( Math.pow( (LUVRawColorValues[i].getValueL()-LUVRawColorValues[j].getValueL()), 2)
+						+ Math.pow( (LUVRawColorValues[i].getValueU()-LUVRawColorValues[j].getValueU()), 2)
+						+ Math.pow( (LUVRawColorValues[i].getValueV()-LUVRawColorValues[j].getValueV()), 2));
+				
+				if( (Dij) > Tcolor ){
 					similarityMatrix[i][j] = 0;
 				}else{
-					similarityMatrix[i][j] = (float) (1-((i-j)/Tcolor));
+					similarityMatrix[i][j] = (float) (1-(Dij/Tcolor));
 				}
 			}
 		}
