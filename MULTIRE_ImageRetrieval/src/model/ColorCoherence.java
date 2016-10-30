@@ -38,14 +38,20 @@ public class ColorCoherence {
 		this.t= t;
 	}
 	
-	public void coherence(){
+	public ArrayList<Pair> coherence(){
 		
-		Pixel[][] pixelMatrix = initializePixelMatrix(coherenceMatrix);
+		pairList = new ArrayList(0);
 		for(int luv = 0; luv<159; luv++){
+			Pixel[][] pixelMatrix = initializePixelMatrix(coherenceMatrix);
 			currentLUV = luv; // 1 for testing purposes; change it back to currentLUV = luv
 			label = 1;
 			first = false;
 			nodeList = new ArrayList(0);
+			valueMap = new HashMap<Integer, Integer>();
+			nodeList = new ArrayList(0);
+			list = new ArrayList(0);
+			parentList = new ArrayList(0);
+			
 			for(int row = 0; row<pixelMatrix.length; row++){
 				for(int column = 0; column<pixelMatrix[0].length; column++){
 					if(row == 0 && pixelMatrix[row][column].getValue() == currentLUV && first == false){
@@ -135,8 +141,8 @@ public class ColorCoherence {
 				}
 			}
 			
-			System.out.println("Row: "+pixelMatrix.length);
-			System.out.println("Column: "+pixelMatrix[0].length);
+			//System.out.println("Row: "+pixelMatrix.length);
+			//System.out.println("Column: "+pixelMatrix[0].length);
 			
 			for(int x = 0; x<pixelMatrix.length; x++){
 				for(int y = 0; y<pixelMatrix[0].length; y++){
@@ -162,7 +168,7 @@ public class ColorCoherence {
 			for(Integer i: keys)
 			{
 				if(valueMap.get(i) != 0 && i != -1){
-					System.out.println("Key: "+ i+ " Value: "+ valueMap.get(i));
+					//System.out.println("Key: "+ i+ " Value: "+ valueMap.get(i));
 					if(valueMap.get(i) >= t){
 						coherent+=valueMap.get(i);
 					}
@@ -174,12 +180,12 @@ public class ColorCoherence {
 			
 			Pair pair = new Pair(coherent, noncoherent);
 			pairList.add(pair);
-			System.out.println("Coherent: "+coherent);
-			System.out.println("Nonoherent: "+noncoherent);
+			//System.out.println("Coherent: "+coherent);
+			//System.out.println("Nonoherent: "+noncoherent);
 			
 		}
 		
-		
+		return pairList;
 		//Testing Purposes
 		//for(int i = 0; i<pixelMatrix.length; i++){
 		//	for(int j =0; j<pixelMatrix[0].length; j++){
@@ -208,5 +214,17 @@ public class ColorCoherence {
 		}
 		
 		return pixelMatrix;
+	}
+	
+	public int computeCCV(ArrayList<Pair> pairList1, ArrayList<Pair> pairList2){
+		
+		System.out.println("p1: "+pairList1.size() + " p2: "+pairList2.size());
+		int total = 0;
+		for(int i =0; i<159; i++){
+			total += Math.abs(pairList1.get(i).getCoherent()-pairList2.get(i).getCoherent())
+				     + Math.abs(pairList1.get(i).getNoncoherent()-pairList2.get(i).getNoncoherent());
+		}
+		
+		return total;
 	}
 }
