@@ -131,7 +131,7 @@ public class PerceptualSimilarity {
 	
 	public float getSimilarity(PerceptualSimilarity img2){
 		
-		System.out.println("Getting final similarity...");
+//		System.out.println("Getting final similarity...");
 		
 		float finalSim = 0;
 		for(int i = 0; i < 159; i++){
@@ -141,7 +141,7 @@ public class PerceptualSimilarity {
 			}
 		}
 		
-		System.out.println("SIM in Perceptual Similarity: " + finalSim);
+//		System.out.println("SIM in Perceptual Similarity: " + finalSim);
 		
 		return finalSim;
 		
