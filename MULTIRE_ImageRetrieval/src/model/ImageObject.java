@@ -10,8 +10,9 @@ public class ImageObject {
 	ArrayList<Float> percentageOfColors = new ArrayList<Float>();
 	int numAcceptedColors =0 ;
 	
+	// For Color Histogram
 	public ImageObject(int[] histogram, int pixels){
-		histogramOfImage = histogram;
+		histogramOfImage = histogram; // the LUV values
 		totalPixels = pixels;
 		getAcceptedColors();
 	}
@@ -33,24 +34,25 @@ public class ImageObject {
 	}
 	
 	public void getAcceptedColors(){
-		// Gets the colors of Image Q (chosen image) that's not 0.0
+		// Gets the colors of Image Q (chosen image) na hindi 0.0
 		
-		ArrayList<Integer> temp = new ArrayList<Integer>();
+//		ArrayList<Integer> temp = new ArrayList<Integer>();
+//		System.out.println("\ngetAcceptedColors()");
 		
 		//159 is the total number of LUV colors we have
 		for(int x=0; x<159; x++){
 			if(histogramOfImage[x] != 0){
-				float ans = (float)histogramOfImage[x] / (float)totalPixels;
+				float ans = (float)histogramOfImage[x] / (float)totalPixels; // gets the histogram; this is the NH(Q) part
 				percentageOfColors.add(ans);
 				
-				if( ans >= 0.005){
+				if( ans > 0.005){
 					numAcceptedColors++;
 				}
 			}else{
 				percentageOfColors.add((float)0.0);
 			}
 			
-			System.out.println("percentageOfColor(" + x + ") = " + percentageOfColors.get(x));
+//			System.out.println("percentageOfColor(" + x + ") = " + percentageOfColors.get(x));
 		}
 		
 	}
@@ -61,7 +63,7 @@ public class ImageObject {
 		float checkerHistogram = 0; // the sum of all histogram must be 1.00
 		float ans= (float)0.0;
 		
-		System.out.println("\ngetSimilarity()");
+//		System.out.println("\ngetSimilarity()");
 		for(int x = 0; x < percentageOfColors.size(); x++ ){
 			checkerHistogram += percentageOfColors.get(x);
 			
@@ -70,7 +72,7 @@ public class ImageObject {
 				float numerator = Math.abs(percentageOfColors.get(x)-img2.percentageOfColors.get(x));
 				float denominator =  Math.max(percentageOfColors.get(x), img2.percentageOfColors.get(x));
 				
-				System.out.println("percentageOfColor(" + x + ") = " + percentageOfColors.get(x));
+//				System.out.println("percentageOfColor(" + x + ") = " + percentageOfColors.get(x));
 				
 				float temp = (float)1-(numerator/denominator);		
 				ans+= temp;
@@ -80,8 +82,9 @@ public class ImageObject {
 		float temp1 = (float)1/numAcceptedColors;
 		float finalAns = ans * temp1;
 		
-		System.out.println("numAcceptedColors = " + numAcceptedColors);
-		System.out.println("checkerHistogram = " + checkerHistogram);
+//		System.out.println("numAcceptedColors = " + numAcceptedColors);
+//		System.out.println("checkerHistogram = " + checkerHistogram);
+//		System.out.println("Similarity: " + finalAns);
 		
 		return finalAns;
 	}

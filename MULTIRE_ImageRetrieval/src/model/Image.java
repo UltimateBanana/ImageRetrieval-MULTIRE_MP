@@ -142,33 +142,33 @@ class Image extends JFrame {
     }
     
         
-	public static void main(String args[]) {
-	    JPanel panelCenter = new JPanel();
-   	    System.out.println("Starting Image...");
-	    Image mainFrame = new Image();
-	    
-	    panelCenter.setSize(100,100);
-	    mainFrame.getContentPane().add(panelCenter, BorderLayout.NORTH);
-	    
-	    mainFrame.jTextArea1.setLocation(20,230);
-	    mainFrame.jTextArea1.setSize(400,100);
-	    
-	    mainFrame.getContentPane().add(mainFrame.jTextArea1);
-		
-	    mainFrame.jTextArea2.setLocation(20,331);
-	    mainFrame.jTextArea2.setSize(200,100);
-	    
-	    mainFrame.getContentPane().add(mainFrame.jTextArea2);
-		
-		
-		mainFrame.setSize(600, 400);
-		mainFrame.setTitle("Image");
-		mainFrame.setVisible(true);
-
-                
-        mainFrame.getRGB(1,20,"images/", "0.jpg");		
-		
-		mainFrame.init();
-		
-	}
+//	public static void main(String args[]) {
+//	    JPanel panelCenter = new JPanel();
+//   	    System.out.println("Starting Image...");
+//	    Image mainFrame = new Image();
+//	    
+//	    panelCenter.setSize(100,100);
+//	    mainFrame.getContentPane().add(panelCenter, BorderLayout.NORTH);
+//	    
+//	    mainFrame.jTextArea1.setLocation(20,230);
+//	    mainFrame.jTextArea1.setSize(400,100);
+//	    
+//	    mainFrame.getContentPane().add(mainFrame.jTextArea1);
+//		
+//	    mainFrame.jTextArea2.setLocation(20,331);
+//	    mainFrame.jTextArea2.setSize(200,100);
+//	    
+//	    mainFrame.getContentPane().add(mainFrame.jTextArea2);
+//		
+//		
+//		mainFrame.setSize(600, 400);
+//		mainFrame.setTitle("Image");
+//		mainFrame.setVisible(true);
+//
+//                
+//        mainFrame.getRGB(1,20,"images/", "0.jpg");		
+//		
+//		mainFrame.init();
+//		
+//	}
 }
