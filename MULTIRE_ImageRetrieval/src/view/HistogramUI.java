@@ -206,7 +206,7 @@ public class HistogramUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     
-    public static void main(String args[]) {
+/*    public static void main(String args[]) {
         
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
                 try {
@@ -233,7 +233,7 @@ public class HistogramUI extends javax.swing.JFrame {
                 new HistogramUI().setVisible(true);
             }
         });
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseImage;

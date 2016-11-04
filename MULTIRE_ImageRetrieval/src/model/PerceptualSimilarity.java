@@ -2,17 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-/* Steps:
- * [?] 1. Get the raw color value of the LUV color (for the D(i,j) part)
- * [x] 2. Get histogram of image (like in Color Histogram)
- * [?] 3. Do the Color Similarity Matrix
- *        a. Get Dmax
- *        b. Get Tcolor
- *        c. Compute for Color Similarity Matrix
- * [ ] 4. Compute for similarity of img 1 & 2
- * 		  a. Compute for SIMcolor
- * 			 i. Compute for SIMExactCol and SIMPerCol
- */
+ 
 public class PerceptualSimilarity {
 	
 	double[][] similarityMatrix;
@@ -79,8 +69,8 @@ public class PerceptualSimilarity {
 				percentageOfColors.add((float)0.0);
 			}
 		}
-		System.out.println("numAcceptedColors = " + numAcceptedColors);
-		System.out.println("checkerHistogram = " + checkerHistogram);
+//		System.out.println("numAcceptedColors = " + numAcceptedColors);
+//		System.out.println("checkerHistogram = " + checkerHistogram);
 	}
 	
 	public void getLuvValues(){
@@ -121,7 +111,7 @@ public class PerceptualSimilarity {
 		
 		// Get Tcolor
 		double Tcolor = 0.2 * Dmax; // Tcolor = p*Dmax; p is usually 0.2
-		System.out.println(Dmax + "   " + Tcolor);
+//		System.out.println(Dmax + "   " + Tcolor);
 		
 		// Compute for Color Similarity Matrix
 		for(int i = 0; i < 159; i++){
@@ -139,48 +129,50 @@ public class PerceptualSimilarity {
 		}
 	}
 	
-	public void getSimilarity(PerceptualSimilarity img2){
+	public float getSimilarity(PerceptualSimilarity img2){
 		
 		System.out.println("Getting final similarity...");
 		
-//		float finalSim = 0;
-//		for(int i = 0; i < 159; i++){
-//			if(percentageOfColors.get(i) != 0){
-//				finalSim += getSimColor(percentageOfColors.get(i), i, img2.percentageOfColors.get(i), img2.percentageOfColors)*
-//					percentageOfColors.get(i);
-//			}
-//		}
-//		
-//		System.out.println("SIM in Perceptual Similarity: " + finalSim);
+		float finalSim = 0;
+		for(int i = 0; i < 159; i++){
+			if(percentageOfColors.get(i) > 0.005){
+				finalSim += getSimColor(percentageOfColors.get(i), i, img2.percentageOfColors.get(i), img2.percentageOfColors)*
+					percentageOfColors.get(i);
+			}
+		}
+		
+		System.out.println("SIM in Perceptual Similarity: " + finalSim);
+		
+		return finalSim;
 		
 		// Get SimCol summation of both images
-		double simColorFinal = 0;
+		/*double simColorFinal = 0;
 		for(int i = 0; i < 159; i++){
-			if(percentageOfColors.get(i) != 0){
+			if(percentageOfColors.get(i) > 0.005){
 			
-			// Get the SimExactCol
-			double simExactCol = 1-( Math.abs(percentageOfColors.get(i)-img2.percentageOfColors.get(i))
-					/Math.max(percentageOfColors.get(i), img2.percentageOfColors.get(i)) );
-			
-			// Get the SimPerCol
-			double simPerCol = 0;
-			for(int j = 0; j < 159; j++){
-				if(similarityMatrix[i][j] != 0){
-					simPerCol += ( 1-( Math.abs(percentageOfColors.get(i)-img2.percentageOfColors.get(j))
-							/Math.max(percentageOfColors.get(i), img2.percentageOfColors.get(j)) ) )*similarityMatrix[i][j];
+				// Get the SimExactCol
+				double simExactCol = 1-( Math.abs(percentageOfColors.get(i)-img2.percentageOfColors.get(i))
+						/Math.max(percentageOfColors.get(i), img2.percentageOfColors.get(i)) );
+				
+				// Get the SimPerCol
+				double simPerCol = 0;
+				for(int j = 0; j < 159; j++){
+					if(similarityMatrix[i][j] != 0){
+						simPerCol += ( 1-( Math.abs(percentageOfColors.get(i)-img2.percentageOfColors.get(j))
+								/Math.max(percentageOfColors.get(i), img2.percentageOfColors.get(j)) ) )*similarityMatrix[i][j];
+					}
 				}
-			}
-			
-			// Get the SimCol per color
-			double simColor = simExactCol*(1+simPerCol);
-			
-			// Add to SimCol summation
-			simColorFinal += simColor*percentageOfColors.get(i);
+				
+				// Get the SimCol per color
+				double simColor = simExactCol*(1+simPerCol);
+				
+				// Add to SimCol summation
+				simColorFinal += simColor*percentageOfColors.get(i);
 			
 			}
 		}
 		
-		System.out.println("SIM in Perceptual Similarity: " + simColorFinal);
+		System.out.println("SIM in Perceptual Similarity: " + simColorFinal);*/
 	}
 	
 	public float getSimExactCol(float histogramImg1, float histogramImg2){
@@ -191,8 +183,10 @@ public class PerceptualSimilarity {
 		float sim = 0;
 		
 		for(int j = 0; j < 159; j++){
-			sim += (1-( Math.abs(histogramImg1-percentageOfColorsImg2.get(j))/
-					Math.max(histogramImg1, percentageOfColorsImg2.get(j)) )) * similarityMatrix[i][j] ;
+			if(similarityMatrix[i][j] != 0){
+				sim += (1-( Math.abs(histogramImg1-percentageOfColorsImg2.get(j))/
+						Math.max(histogramImg1, percentageOfColorsImg2.get(j)) )) * similarityMatrix[i][j] ;
+			}
 		}
 		
 		return sim;

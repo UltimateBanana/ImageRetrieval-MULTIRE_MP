@@ -290,16 +290,16 @@ public class ImageController {
 		return tempImg;
 	}
 	
-	public static void main(String Args[]){
+	/*public static void main(String Args[]){
 		
 		// COLOR HISTOGRAM
-		/*System.out.println("--- COLOR HISTOGRAM ---");
+		System.out.println("--- COLOR HISTOGRAM ---");
 		System.out.println("Image 1:");
 		ImageObject CHimg1 = convertImageCH("images/", "206.jpg");
 		System.out.println("\nImage 2:");
 		ImageObject CHimg2 = convertImageCH("images/", "218.jpg");
 		
-		System.out.println("SIM in Color Histogram = " + CHimg1.getSimilarity(CHimg2) + "\n\n");*/
+		System.out.println("SIM in Color Histogram = " + CHimg1.getSimilarity(CHimg2) + "\n\n");
 		
 		
 		// CENTERING REFINEMENT
@@ -307,24 +307,24 @@ public class ImageController {
 		System.out.println("Image 1:");
 		CenteringRefinement CRimg1 = convertImageCR("images/", "121.jpg");
 		System.out.println("\nImage 2:");
-		CenteringRefinement CRimg2 = convertImageCR("images/", "128.jpg");
+		CenteringRefinement CRimg2 = convertImageCR("images/", "121.jpg");
 		
-//		CRimg1.getSimilarity(CRimg2);
-		CRimg1.getEucDistance(CRimg2);
+		CRimg1.getSimilarity(CRimg2);
+//		CRimg1.getEucDistance(CRimg2);
 		
 		
 		// PERCEPTUAL SIMILARITY
-		/*System.out.println("--- PERCEPTUAL SIMILARITY ---");
+		System.out.println("--- PERCEPTUAL SIMILARITY ---");
 		System.out.println("Image 1:");
-		PerceptualSimilarity PSimg1 = convertImagePS("images/", "206.jpg");
+		PerceptualSimilarity PSimg1 = convertImagePS("images/", "0.jpg");
 		System.out.println("\nImage 2:");
-		PerceptualSimilarity PSimg2 = convertImagePS("images/", "20.jpg");
+		PerceptualSimilarity PSimg2 = convertImagePS("images/", "10.jpg");
 		
-		PSimg1.getSimilarity(PSimg2);*/
+		PSimg1.getSimilarity(PSimg2);
 		
 		
 		// COLOR COHERENCE CCV
-		/*ImageObject img1 = convertImageCC("images/", "11.jpg");
+		ImageObject img1 = convertImageCC("images/", "11.jpg");
 		ColorCoherence ccv = new ColorCoherence(matrixArray, 6);
 		ArrayList<Pair> pairList = ccv.coherence();
 		
@@ -346,6 +346,6 @@ public class ImageController {
 		
 		System.out.println(img1.getSimilarity(img2));
 		System.out.println("CCV: "+colorcoherence);
-		*/
-	}
+		
+	}*/
 }

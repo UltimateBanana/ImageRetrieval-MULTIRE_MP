@@ -25,7 +25,7 @@ public class MainModel {
 			String img2Filename = fileEntry.getName();
 			String extension = img2Filename.substring(img2Filename.lastIndexOf(".") + 1, img2Filename.length());
 			
-			if(extension.equals("jpg") && !img2Filename.equals(filename)){
+			if(extension.equals("jpg")){
 //				System.out.println(fileEntry.getName());
 				ImageObject CHimg2 = ImageController.convertImageCH(path, img2Filename);
 				
@@ -46,6 +46,28 @@ public class MainModel {
 	
 	// Perceptual Similarity
 	public ArrayList<ImageInfo> methodPS(String path, String filename){
+		PerceptualSimilarity PSimg1 = ImageController.convertImagePS(path, filename);
+		
+		File folder = new File(path);
+		for (File fileEntry : folder.listFiles()) {
+			String img2Filename = fileEntry.getName();
+			String extension = img2Filename.substring(img2Filename.lastIndexOf(".") + 1, img2Filename.length());
+			
+			if(extension.equals("jpg")){
+//				System.out.println(fileEntry.getName());
+				PerceptualSimilarity PSimg2 = ImageController.convertImagePS(path, img2Filename);
+				
+				imgSimList.add(new ImageInfo(path, img2Filename, PSimg1.getSimilarity(PSimg2)));
+				
+//				System.out.println("\nImage 2 is now " + img2Filename);
+			}
+	    }
+		Collections.sort(imgSimList, new imgDescComparator());
+		
+//		System.out.println("\n RANKED COLOR HISTOGRAM...");
+		for(int i = 0; i < imgSimList.size(); i++){
+			System.out.println(imgSimList.get(i).getFilename() + ": " + imgSimList.get(i).getSimilarity());
+		}
 		
 		return imgSimList;
 	}
@@ -63,7 +85,7 @@ public class MainModel {
 			String img2Filename = fileEntry.getName();
 			String extension = img2Filename.substring(img2Filename.lastIndexOf(".") + 1, img2Filename.length());
 			
-			if(extension.equals("jpg") && !img2Filename.equals(filename)){
+			if(extension.equals("jpg")){
 				ImageObject img2 = ic.convertImageCC(path, img2Filename);
 				ColorCoherence ccv2 = new ColorCoherence(ic.getMatrixArray(), 6);
 				ArrayList<Pair> pairList2 = ccv2.coherence();
@@ -91,16 +113,18 @@ public class MainModel {
 			String img2Filename = fileEntry.getName();
 			String extension = img2Filename.substring(img2Filename.lastIndexOf(".") + 1, img2Filename.length());
 			
-			if(extension.equals("jpg") && !img2Filename.equals(filename)){
+			if(extension.equals("jpg")){
 //				System.out.println(fileEntry.getName());
-				CenteringRefinement CRimg2 = ImageController.convertImageCR("images/", "218.jpg");
+				CenteringRefinement CRimg2 = ImageController.convertImageCR(path, img2Filename);
 				
 				imgSimList.add(new ImageInfo(path, img2Filename, CRimg1.getSimilarity(CRimg2)));
+//				imgSimList.add(new ImageInfo(path, img2Filename, CRimg1.getEucDistance(CRimg2)));
 				
 //				System.out.println("\nImage 2 is now " + img2Filename);
 			}
 	    }
 		Collections.sort(imgSimList, new imgDescComparator());
+//		Collections.sort(imgSimList, new imgAscComparator());
 		
 //		System.out.println("\n RANKED COLOR HISTOGRAM...");
 		for(int i = 0; i < imgSimList.size(); i++){
@@ -110,6 +134,8 @@ public class MainModel {
 		return imgSimList;
 	}
 	
+	
+	// Custom Comparators
 	public class imgDescComparator implements Comparator<ImageInfo> {
 	    @Override
 		public int compare(ImageInfo o1, ImageInfo o2) {

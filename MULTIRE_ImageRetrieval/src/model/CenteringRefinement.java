@@ -198,9 +198,9 @@ public class CenteringRefinement {
 		float finalSimNonCenter = simNonCenter * temp2;
 //		System.out.println("numAcceptedColorsNonCenter = " + numAcceptedColorsNonCenter);
 		
-		System.out.println("\nCR SIM in Center = " + finalSimCenter);
-		System.out.println("CR SIM in Non-Center = " + finalSimNonCenter);
-		System.out.println("Total CR SIM = " + (finalSimCenter+finalSimNonCenter)/2);
+//		System.out.println("\nCR SIM in Center = " + finalSimCenter);
+//		System.out.println("CR SIM in Non-Center = " + finalSimNonCenter);
+//		System.out.println("Total CR SIM = " + (finalSimCenter+finalSimNonCenter)/2);
 		
 		return (finalSimCenter+finalSimNonCenter);
 //		return finalAns;
@@ -213,7 +213,7 @@ public class CenteringRefinement {
 			eucDistance += Math.sqrt( Math.pow( (histogramBucketCenter[i]-img2.histogramBucketCenter[i]), 2)
 					+ Math.pow( (histogramBucketNonCenter[i]-img2.histogramBucketNonCenter[i]), 2));
 		}
-		System.out.println("Euclidean Distance = " + eucDistance);
+//		System.out.println("Euclidean Distance = " + eucDistance);
 		
 		return eucDistance;
 	}
