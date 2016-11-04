@@ -10,9 +10,11 @@ public class MainController {
 	String path, filename;
 	int method;
 	MainModel mainModel;
+	ArrayList<ImageInfo> rankedImgList;
 	
 	public MainController(String path, String filename, String methodName){
 		mainModel = new MainModel();
+		rankedImgList = new ArrayList<ImageInfo>(0);
 		
 		this.path = path;
 		this.filename = filename;
@@ -39,22 +41,30 @@ public class MainController {
 	
 	// Pass the method to MainModel, MainModel will do the method, 
 	// returns sorted ArrayList<ImageInfo>, to be used by MainGUI to display ranked images
-	public ArrayList<ImageInfo> getRankedImages(){
+	public void getRankedImages(){
 		
 		if(method == 1){
-			return mainModel.methodCH(path, filename);
+			rankedImgList = mainModel.methodCH(path, filename);
 		} 
 		else if(method == 2){
-			return mainModel.methodPS(path, filename);
+			rankedImgList = mainModel.methodPS(path, filename);
 		} 
 		else if(method == 3){
-			return mainModel.methodCC(path, filename);
+			rankedImgList = mainModel.methodCC(path, filename);
 		} 
 		else if(method == 4){
-			return mainModel.methodCR(path, filename);
+			rankedImgList = mainModel.methodCR(path, filename);
 		}
-		return null;
 	}
 	
-	
+	public String displayRankedImages(){
+		String rankedImages = "";
+		
+		for(int i = 0; i < rankedImgList.size(); i++){
+			rankedImages += rankedImgList.get(i).getFilename() + "\n";
+		}
+		
+//		System.out.println("rank: " + rankedImages);
+		return rankedImages;
+	}
 }

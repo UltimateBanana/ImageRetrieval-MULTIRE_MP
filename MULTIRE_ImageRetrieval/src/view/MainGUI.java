@@ -25,7 +25,15 @@ import javax.swing.SwingConstants;
 import controller.MainController;
 
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JTextArea;
+import java.awt.ScrollPane;
+import java.awt.GridLayout;
 
 public class MainGUI {
 
@@ -47,10 +55,15 @@ public class MainGUI {
 	private JRadioButton rdbtnCC;
 	private JRadioButton rdbtnCR;
 	
+	// Text Area
+	private JTextArea textAreaDisplay;
+	private ScrollPane scrollPane;
+	
 	// Non-GUI stuff
 	private String filename = "";
 	private String path = "";
 	private MainController controller;
+	private String output= "";
 	
 	/**
 	 * Launch the application.
@@ -89,13 +102,13 @@ public class MainGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 722, 450);
+		frame.setBounds(100, 100, 552, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		panel = new JPanel();
+		panel.setBounds(0, 0, 552, 428);
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(0, 0, 752, 428);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		panel.setVisible(true);
@@ -139,8 +152,9 @@ public class MainGUI {
 		rdbtnGroup.add(rdbtnCR);
 		rdbtnGroup.add(rdbtnPS);
 		
-		btnExecute = new JButton("JUST DO IT");
+		btnExecute = new JButton("Execute");
 		btnExecute.setBounds(27, 354, 117, 29);
+		panel.add(btnExecute);
 		btnExecute.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) { 
 				// Goes through the button group to check if a radio button is selected & an image is selected
@@ -150,24 +164,47 @@ public class MainGUI {
 
 		            if (button.isSelected() && !filename.equals("") && !path.equals("")) {
 		            	controller = new MainController(path, filename, button.getText());
+		            	output = controller.displayRankedImages();
+		            	displayOutput();
+		            	
 		            }
 		        }
 				
 			} 
 		});
-		panel.add(btnExecute);
 		
 		panelImg1 = new JPanel();
 		panelImg1.setBackground(Color.WHITE);
 		panelImg1.setBounds(17, 39, 240, 172);
 		panel.add(panelImg1);
+		panelImg1.setVisible(true);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBackground(Color.DARK_GRAY);
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(341, 6, 8, 416);
 		panel.add(separator);
-		panelImg1.setVisible(true);
+		
+		JLabel lblResult = new JLabel("Result ");
+		lblResult.setBounds(361, 11, 61, 16);
+		panel.add(lblResult);
+		
+		textAreaDisplay = new JTextArea(3,4);
+		textAreaDisplay.setWrapStyleWord(true);
+		textAreaDisplay.setLineWrap(true);
+		textAreaDisplay.setBounds(534, 416, -168, -366);
+		textAreaDisplay.setBackground(Color.WHITE);
+		textAreaDisplay.setEditable(false);
+		textAreaDisplay.setText("SDFSDF");
+		panel.add(textAreaDisplay);
+		
+//		JScrollPane scrollPane_1 = new JScrollPane(textAreaDisplay);
+//		scrollPane_1.setBounds(543, 39, -183, 389);
+//		frame.getContentPane().add(scrollPane_1);
+//		JScrollPane scroll = new JScrollPane(textAreaDisplay);
+//		scroll.setBounds(534, 39, -158, 370);
+//		panel.add(scroll);
+		
 	}
 	
 	// Gets the filename and path of the image
@@ -197,5 +234,13 @@ public class MainGUI {
 	        panelImg1.repaint();
 	        panelImg1.updateUI();
 	    }
+	}
+	
+	public void displayOutput(){
+		textAreaDisplay.setText("");
+		textAreaDisplay.append(output);
+    	textAreaDisplay.revalidate();
+    	textAreaDisplay.repaint();
+    	textAreaDisplay.updateUI();
 	}
 }
